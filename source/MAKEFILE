@@ -1,0 +1,207 @@
+# -----------------------------------------------------------------------------
+#   _____ __  __                  _
+#  / ____|  \/  |                | |
+# | |    | \  / | ___  _ __ _ __ | |__
+# | |    | |\/| |/ _ \| '__| '_ \| '_ \
+# | |____| |  | | (_) | |  | |_) | | | |
+#  \_____|_|  |_|\___/|_|  | .__/|_| |_|
+#                          | |                    
+#                          |_|                    
+#
+# The Complete Morph - public source release
+# -----------------------------------------------------------------------------
+#
+# Originally released under a custom license.
+# This historical re-release is provided under the MIT License.
+# See the LICENSE file in the repo root for details.
+#
+# https://github.com/nettlep
+#
+# -----------------------------------------------------------------------------
+#
+# Notes about this software:
+#
+# CMorph generates high quality (even by today's standards) two-dimensional
+# morphs from two static input images. It was written for DOS a number of years
+# ago, using the Watcom compiler, back before C++ was the rage.
+#
+# Some of this source is ugly, but it should all be fairly readable.
+#
+# You will not be able to simply compile this program into an EXE because not
+# all components of the program exist (there are some other libraries that are
+# required, but are unavailable for public release at this time.) These missing
+# libraries are the Int86 lib (DOS software interrupts), FLIC lib (animations)
+# and the Image lib (loading/saving of image files.)
+#
+# This source code is best viewed with 4-character tabs.
+#
+# -----------------------------------------------------------------------------
+#圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹
+#
+#                       Makefile for The Complete Morph
+#
+#圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹圹
+
+.ERASE
+
+#北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
+#
+#                              Conditional Rules
+#
+#北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
+
+DEMO = n
+DEBUG = n
+
+#北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
+#
+#                            Type:  reg/noreg/pro
+#
+#北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
+
+TYPE = reg
+
+#北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
+#
+#                               Implicit Rules
+#
+#北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
+
+.asm.obj:
+        $(ASSEMBLE)
+        @ECHO -------------------------------------------------------------------------------
+
+.c.obj:
+        $(COMPILE)
+        @ECHO -------------------------------------------------------------------------------
+
+.obj.exe:
+        WLINK @CMORPH.LNK
+
+#北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
+#
+#                          Options and optomizations
+#
+#北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
+
+!ifeq DEMO y
+DEMO_MODE = -dDEMO
+!endif
+
+!ifeq TYPE noreg
+REGISTERED = -dNOREG
+!endif
+
+!ifeq TYPE reg
+REGISTERED = -dREG
+!endif
+
+!ifeq TYPE pro
+REGISTERED = -dPRO
+!endif
+
+!ifeq TYPE protemp
+REGISTERED = -dPRO
+OTHER = -dPROTEMP
+!endif
+
+!ifeq DEBUG y
+COPTS = /en /fpi /3r /w4 /zq /zp /d2 $(DEMO_MODE) $(REGISTERED) $(OTHER)
+AOPTS = /Zi /mx /m5
+!else
+COPTS = /en /fpi /3r /w4 /zq /zp /oilrt /s $(DEMO_MODE) $(REGISTERED) $(OTHER)
+AOPTS = /mx /m5
+!endif
+
+#北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
+#
+#                              Compile Methods
+#
+#北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
+
+COMPILE = WCC386P $[* $(COPTS)
+ASSEMBLE = TASM $(AOPTS) $[*
+
+#北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
+#
+#                              EXE Dependencies
+#
+#北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
+
+CMORPH.EXE : CMORPH.LNK
+CMORPH.EXE : ..\LIB\IMAGE.LIB
+CMORPH.EXE : ..\LIB\INT86.LIB
+CMORPH.EXE : ..\LIB\FLIC.LIB
+CMORPH.EXE : ADDMESH.OBJ
+CMORPH.EXE : ANIMA.OBJ
+CMORPH.EXE : ARITH.OBJ
+CMORPH.EXE : BICUBIC.OBJ
+CMORPH.EXE : BUPDATE.OBJ
+CMORPH.EXE : BUTTONS.OBJ
+CMORPH.EXE : CATMULL.OBJ
+CMORPH.EXE : CMORPH.OBJ
+CMORPH.EXE : CONV.OBJ
+CMORPH.EXE : EDIT.OBJ
+CMORPH.EXE : ERROR.OBJ
+CMORPH.EXE : EXPORT.OBJ
+CMORPH.EXE : FILE.OBJ
+CMORPH.EXE : FLIC.OBJ
+CMORPH.EXE : IMPORT.OBJ
+CMORPH.EXE : INPUT.OBJ
+CMORPH.EXE : INTRO.OBJ
+CMORPH.EXE : KEYS.OBJ
+CMORPH.EXE : MBOX.OBJ
+CMORPH.EXE : MESH.OBJ
+CMORPH.EXE : MOUSE.OBJ
+CMORPH.EXE : MOVEMESH.OBJ
+CMORPH.EXE : OPER.OBJ
+CMORPH.EXE : PREF.OBJ
+CMORPH.EXE : PREV.OBJ
+CMORPH.EXE : PRIMS.OBJ
+CMORPH.EXE : PROC.OBJ
+CMORPH.EXE : PROMPTS.OBJ
+CMORPH.EXE : RESAMPLE.OBJ
+CMORPH.EXE : SCREEN.OBJ
+CMORPH.EXE : STRAIGHT.OBJ
+CMORPH.EXE : UTILS.OBJ
+CMORPH.EXE : WARP.OBJ
+
+#北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
+#
+#                             Module Dependencies
+#
+#北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北北
+
+ADDMESH.OBJ  : ADDMESH.C  CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+ANIMA.OBJ    : ANIMA.ASM  CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+ARITH.OBJ    : ARITH.C    CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+BICUBIC.OBJ  : BICUBIC.C  CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+BUPDATE.OBJ  : BUPDATE.C  CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+BUTTONS.OBJ  : BUTTONS.C  CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+CATMULL.OBJ  : CATMULL.C  CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+CMORPH.OBJ   : CMORPH.C   CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+CONV.OBJ     : CONV.C     CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+EDIT.OBJ     : EDIT.C     CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+ERROR.OBJ    : ERROR.C    CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+EXPORT.OBJ   : EXPORT.C   CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+FILE.OBJ     : FILE.C     CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+FLIC.OBJ     : FLIC.C     CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+IMPORT.OBJ   : IMPORT.C   CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+INPUT.OBJ    : INPUT.C    CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+INTRO.OBJ    : INTRO.C    CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+KEYS.OBJ     : KEYS.C     CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+MBOX.OBJ     : MBOX.C     CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+MESH.OBJ     : MESH.C     CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+MOUSE.OBJ    : MOUSE.C    CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+MOVEMESH.OBJ : MOVEMESH.C CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+OPER.OBJ     : OPER.C     CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+PREF.OBJ     : PREF.C     CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+PREV.OBJ     : PREV.C     CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+PRIMS.OBJ    : PRIMS.C    CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+PROC.OBJ     : PROC.C     CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+PROMPTS.OBJ  : PROMPTS.C  CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+RESAMPLE.OBJ : RESAMPLE.C CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+SCREEN.OBJ   : SCREEN.C   CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+STRAIGHT.OBJ : STRAIGHT.C CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+UTILS.OBJ    : UTILS.C    CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
+WARP.OBJ     : WARP.C     CMORPH.H CMDEFS.H CMPROT.H CMDEFS.H CMMACRO.H ..\INCLUDE\IMAGE.H ..\INCLUDE\INT86.H MAKEFILE
