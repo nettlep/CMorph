@@ -10,9 +10,9 @@ This code has been preserved as faithfully as possible, warts and all. All code 
 
 In the early-90's, the popularity of 2D morphing was at its peak. The Complete Morph (a.k.a. CMorph) was one of the most popular of the bunch. CMorph was even a low-cost solution for many television production houses around the world.
 
-I've released the source code. Since CMorph is DOS-based and requires the Watcom compiler, I've also made available the DOS binaries (see the `bin` folder) and an [animation produced by CMorph](https://nettlep.github.io/assets/cmorph.mp4).
+I've released the source code. Since CMorph is DOS-based and requires the Watcom compiler, I've also made available the DOS binaries (see the `bin` folder) and an [animation produced by CMorph](https://nettlep.github.io/CMorph/assets/cmorph.mp4).
 
-![start of video](https://nettlep.github.io/assets/start.png) ![middle of video](https://nettlep.github.io/assets/middle.png) ![end of video](https://nettlep.github.io/assets/end.png)
+![start of video](https://nettlep.github.io/CMorph/assets/start.png) ![middle of video](https://nettlep.github.io/CMorph/assets/middle.png) ![end of video](https://nettlep.github.io/CMorph/assets/end.png)
 
 ---
 
